@@ -1,3 +1,3 @@
-var demoNUmber = 128;
-var demoString = demoNUmber.toString();
-console.log(demoString);
+var numberToConvert = 128;
+var convertedNumber = numberToConvert.toString();
+console.log(convertedNumber);
