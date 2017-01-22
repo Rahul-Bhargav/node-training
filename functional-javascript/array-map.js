@@ -1,5 +1,5 @@
 function doubleAll(numbers) {
-    var roots = numbers.map(function doubleArray(x){
+    var roots = numbers.map(function doubleNumber(x){
     return x * 2;
     });
     return roots;
