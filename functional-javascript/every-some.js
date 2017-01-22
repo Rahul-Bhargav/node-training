@@ -3,7 +3,7 @@ function checkUsersValid(goodUsers) {
         var result = false;
         result = submittedUsers.every(function isValid(submittedUser) {
             var validity = false;
-            validity = goodUsers.some( function isPresent(goodUser){
+            validity = goodUsers.some(function isPresent(goodUser) {
                 return goodUser.id === submittedUser.id;
             });
             return validity;
