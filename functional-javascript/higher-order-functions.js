@@ -5,13 +5,5 @@ function repeatOperation(operationToPerform,number){
         repeatOperation(operationToPerform,number);
     }
 }
-/*
-function loggerFunction()
-{
-    console.log('test');
-}
-
-repeatOperation(loggerFunction,10);
-*/
 
 module.exports = repeatOperation;
