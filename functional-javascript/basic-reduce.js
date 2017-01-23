@@ -6,7 +6,7 @@ function wordCounter (allWords,word){
     else{
         allWords[word] = 1;
     }
-    return allWords;
+    return allWords[word] ? = allWords[word]++ : ;
 }
 function countWords(inputWords) {
     //console.log(inputWords);
@@ -15,4 +15,4 @@ function countWords(inputWords) {
     return wordCount;
 }
 
-module.exports = countWords
+module.exports = countWords; 
