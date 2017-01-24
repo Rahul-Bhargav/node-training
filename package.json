@@ -1,0 +1,25 @@
+{
+  "name": "node-training",
+  "version": "1.0.0",
+  "description": "This repository has contains the training excersises in NODE.js",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^3.5.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rahul-Bhargav/node-training.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rahul-Bhargav/node-training/issues"
+  },
+  "homepage": "https://github.com/Rahul-Bhargav/node-training#readme"
+}
