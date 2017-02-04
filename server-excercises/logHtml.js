@@ -6,15 +6,13 @@ const getFaceBook = () => axios.get('https://www.facebook.com/');
 
 
 function processRequest() {
-  var result = [];
   return getGoogle()
     .then((response1) => {
       result.push(response1.headers);
       return Promise.all([getFaceBook() , response1]);
     })
     .then((arrayOfResults) => {
-      console.log('2 ', arrayOfResults[0].headers);
-      console.log('1 ', arrayOfResults[1].headers);
+      return arrayOfResults;
     })
     .catch((error) => {
       console.log(error);
