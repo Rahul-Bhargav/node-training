@@ -1,5 +1,4 @@
 const fs = require('fs')
-const path = require('path')
 
 function fileWrite (inputPath, text) {
   return new Promise((resolve, reject) => {
@@ -34,9 +33,6 @@ function checkFileValidity (inputPath) {
       // If file size is greater than 100MB
       if (stats.size > 104857600) {
         reject('The file size exceeds 100MB')
-      }
-      if (!(path.extname(inputPath) === '.txt')) {
-        reject('The input path is not txt')
       }
       resolve()
     })
