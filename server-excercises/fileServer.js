@@ -22,8 +22,8 @@ app.get('/read', function (request, response) {
     })
 })
 
-app.post('/write/:text', function (request, response) {
-  const textInput = '\n' + request.params.text
+app.post('/write/', function (request, response) {
+  const textInput = '\n' + request.body.text
 
   appendFileAsync(inputPath, textInput)
     .then(() => {
@@ -34,24 +34,17 @@ app.post('/write/:text', function (request, response) {
     })
 })
 
-app.put('/update/:lineNumber', urlEncoder, function (request, response) {
-  if (!request.body) response.sendStatus(500)
-  const data = request.body.data
-  console.log(data)
-  const lineNumber = request.params.lineNumber
+app.delete('/destroy/', urlEncoder, function (request, response) {
+  const lineNumber = request.body.lineNumber
   let fileContent
   readFileAsync(inputPath)
     .then((buffer) => {
-      fileContent = buffer.toString()
-      const lines = fileContent.split('\n')
-      if (lineNumber >= lines.length) {
+      fileContent = deleteLine(buffer.toString(), lineNumber)
+      if (!fileContent) {
         response.sendStatus(500)
-      } else {
-        lines[lineNumber] = data
-        fileContent = lines.join('\n')
-        return writeFileAsync(inputPath, fileContent)
+        return 'Error'
       }
-      return 'Error'
+      return writeFileAsync(inputPath, fileContent)
     })
     .then((err) => {
       if (err) {
@@ -65,4 +58,51 @@ app.put('/update/:lineNumber', urlEncoder, function (request, response) {
     })
 })
 
+app.put('/update/', urlEncoder, function (request, response) {
+  if (!request.body) response.sendStatus(500)
+  const data = request.body.data
+  const lineNumber = request.body.lineNumber
+  let fileContent
+  readFileAsync(inputPath)
+    .then((buffer) => {
+      fileContent = modfiyFileContent(buffer.toString(), lineNumber, data)
+      if (!fileContent) {
+        response.sendStatus(500)
+        return 'Error'
+      }
+      return writeFileAsync(inputPath, fileContent)
+    })
+    .then((err) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+      response.send(`Success`)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+})
+
+function modfiyFileContent (fileContent, lineNumber, data) {
+  const lines = fileContent.split('\n')
+  if (lineNumber >= lines.length) {
+    return false
+  } else {
+    lines[lineNumber] = data
+    fileContent = lines.join('\n')
+    return fileContent
+  }
+}
+
+function deleteLine (fileContent, lineNumber) {
+  let lines = fileContent.split('\n')
+  if (lineNumber >= lines.length) {
+    return false
+  } else {
+    lines.splice(lineNumber, 1)
+    fileContent = lines.join('\n')
+    return fileContent
+  }
+}
 app.listen(8080)
