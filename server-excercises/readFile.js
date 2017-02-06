@@ -1,19 +1,19 @@
-const fs = require('fs');
-const inputPath = '/Users/rahulsurabhi/Documents/Training/node-training/README.md';
+const fs = require('fs')
+const inputPath = '/Users/rahulsurabhi/Documents/Training/node-training/README.md'
 
 const readfilePromise = new Promise((resolve, reject) => {
   fs.readFile(inputPath, (err, fileBuffer) => {
     if (err) {
-      reject(err);
+      reject(err)
     }
-    resolve(fileBuffer);
-  });
+    resolve(fileBuffer)
+  })
 })
 
 readfilePromise
 .then((buffer) => {
-  console.log(buffer.toString());
+  console.log(buffer.toString())
 })
 .catch((reason) => {
-  console.log(reason);
-});
+  console.log(reason)
+})
