@@ -3,86 +3,114 @@ const appendFileAsync = require('./appendFileAsync.js')
 const writeFileAsync = require('./writeFileAsync.js')
 const bodyParser = require('body-parser')
 
-const inputPath = '/Users/rahulsurabhi/Documents/Training/node-training/server-excercises/TestFolder/sample.txt'
+const filePath = '/Users/rahulsurabhi/Documents/Training/node-training/server-excercises/TestFolder/sample.txt'
+const htmlPath = '/Users/rahulsurabhi/Documents/Training/node-training/server-excercises/index.html'
 var express = require('express')
 var app = express()
 const urlEncoder = bodyParser.urlencoded({ extended: false })
 
 app.get('/', function (request, response) {
-  response.send(`Use /read or / write`)
+  response.redirect('/read')
 })
 
 app.get('/read', function (request, response) {
-  readFileAsync(inputPath)
-    .then((buffer) => {
-      response.sendFile(inputPath)
+  let fileContent = ''
+  let htmlContent = ''
+  readFileAsync(filePath)
+    .then((fileBuffer) => {
+      fileContent = fileBuffer.toString()
+      return readFileAsync(htmlPath)
     })
-    .catch((error) => {
-      console.error(error)
+    .then((htmlBuffer) => {
+      htmlContent = htmlBuffer.toString()
+      htmlContent = updateHTML(htmlContent, fileContent)
+      return writeFileAsync(htmlPath, htmlContent)
     })
-})
-
-app.post('/write/', function (request, response) {
-  const textInput = '\n' + request.body.text
-
-  appendFileAsync(inputPath, textInput)
     .then(() => {
-      response.send(`Succesfully added ${textInput} to the file`)
+      response.sendFile(htmlPath)
     })
     .catch((error) => {
       console.error(error)
+      response.sendStatus(500)
     })
 })
 
-app.delete('/destroy/', urlEncoder, function (request, response) {
+app.post('/write', urlEncoder, function (request, response) {
+  const textInput = '\n' + request.body.data
+
+  appendFileAsync(filePath, textInput)
+    .then(() => {
+      response.redirect('/read')
+    })
+    .catch((error) => {
+      console.error(error)
+      response.sendStatus(500)
+    })
+})
+
+app.post('/destroy', urlEncoder, function (request, response) {
   const lineNumber = request.body.lineNumber
   let fileContent
-  readFileAsync(inputPath)
+  readFileAsync(filePath)
     .then((buffer) => {
       fileContent = deleteLine(buffer.toString(), lineNumber)
       if (!fileContent) {
         response.sendStatus(500)
         return 'Error'
       }
-      return writeFileAsync(inputPath, fileContent)
+      return writeFileAsync(filePath, fileContent)
     })
     .then((err) => {
       if (err) {
         console.log(err)
         return
       }
-      response.send(`Success`)
+      response.redirect('/read')
     })
     .catch((error) => {
       console.error(error)
+      response.sendStatus(500)
     })
 })
 
-app.put('/update/', urlEncoder, function (request, response) {
+app.post('/update', urlEncoder, function (request, response) {
   if (!request.body) response.sendStatus(500)
   const data = request.body.data
   const lineNumber = request.body.lineNumber
   let fileContent
-  readFileAsync(inputPath)
+  readFileAsync(filePath)
     .then((buffer) => {
       fileContent = modfiyFileContent(buffer.toString(), lineNumber, data)
       if (!fileContent) {
         response.sendStatus(500)
         return 'Error'
       }
-      return writeFileAsync(inputPath, fileContent)
+      return writeFileAsync(filePath, fileContent)
     })
     .then((err) => {
       if (err) {
         console.log(err)
         return
       }
-      response.send(`Success`)
+      response.redirect('/read')
     })
     .catch((error) => {
       console.error(error)
+      response.sendStatus(500)
     })
 })
+
+function updateHTML (htmlContent, fileContent) {
+  let splitHtml = htmlContent.split('ol')
+  let splitfile = fileContent.split('\n')
+  let contentToAdd = ''
+  splitfile.forEach((element) => {
+    contentToAdd += `<li>${element}</li>`
+  })
+  splitHtml[1] = `>${contentToAdd}<`
+  htmlContent = splitHtml.join('ol')
+  return htmlContent
+}
 
 function modfiyFileContent (fileContent, lineNumber, data) {
   const lines = fileContent.split('\n')
