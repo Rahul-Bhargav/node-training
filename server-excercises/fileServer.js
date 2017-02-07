@@ -1,9 +1,5 @@
-const readFileAsync = require('./readFileAsync.js')
-const appendFileAsync = require('./appendFileAsync.js')
-const writeFileAsync = require('./writeFileAsync.js')
+const postgreDB = require('./dabataseInterface')
 const bodyParser = require('body-parser')
-
-const inputPath = '/Users/rahulsurabhi/Documents/Training/node-training/server-excercises/TestFolder/sample.txt'
 var express = require('express')
 var app = express()
 const urlEncoder = bodyParser.urlencoded({ extended: false })
@@ -13,96 +9,71 @@ app.get('/', function (request, response) {
 })
 
 app.get('/read', function (request, response) {
-  readFileAsync(inputPath)
-    .then((buffer) => {
-      response.sendFile(inputPath)
+  postgreDB.read()
+    .then((result) => {
+      response.json(result[0])
     })
     .catch((error) => {
+      response.sendStatus(500)
       console.error(error)
     })
 })
 
-app.post('/write/', function (request, response) {
-  const textInput = '\n' + request.body.text
-
-  appendFileAsync(inputPath, textInput)
+app.post('/write/:task', function (request, response) {
+  console.log('here')
+  const task = request.params.task
+  task.trim()
+  if (!task || task === '') {
+    response.sendStatus(500)
+    return
+  }
+  postgreDB.insert(task)
     .then(() => {
-      response.send(`Succesfully added ${textInput} to the file`)
+      response.send(`Succesfully added ${task} to the database`)
     })
     .catch((error) => {
+      response.sendStatus(500)
       console.error(error)
     })
 })
 
-app.delete('/destroy/', urlEncoder, function (request, response) {
-  const lineNumber = request.body.lineNumber
-  let fileContent
-  readFileAsync(inputPath)
-    .then((buffer) => {
-      fileContent = deleteLine(buffer.toString(), lineNumber)
-      if (!fileContent) {
+app.delete('/destroy/:id', urlEncoder, function (request, response) {
+  const id = request.params.id
+  if (!id) {
+    response.sendStatus(500)
+    return
+  }
+  postgreDB.destroy(id)
+    .then((result) => {
+      if (result[1].rowCount === 0) {
         response.sendStatus(500)
-        return 'Error'
+        console.log(`Delete Index does not exist`)
       }
-      return writeFileAsync(inputPath, fileContent)
-    })
-    .then((err) => {
-      if (err) {
-        console.log(err)
-        return
-      }
-      response.send(`Success`)
+      response.send(`Succesfully deleted ID:${id} from the database`)
     })
     .catch((error) => {
+      response.sendStatus(500)
       console.error(error)
     })
 })
 
-app.put('/update/', urlEncoder, function (request, response) {
+app.put('/update/:id', urlEncoder, function (request, response) {
   if (!request.body) response.sendStatus(500)
-  const data = request.body.data
-  const lineNumber = request.body.lineNumber
-  let fileContent
-  readFileAsync(inputPath)
-    .then((buffer) => {
-      fileContent = modfiyFileContent(buffer.toString(), lineNumber, data)
-      if (!fileContent) {
-        response.sendStatus(500)
-        return 'Error'
-      }
-      return writeFileAsync(inputPath, fileContent)
-    })
-    .then((err) => {
-      if (err) {
-        console.log(err)
-        return
-      }
-      response.send(`Success`)
+  const task = request.body.task
+  const status = request.body.status
+  const id = request.params.id
+  if (!id || !task && !status) {
+    response.sendStatus(500)
+    return
+  }
+  postgreDB.update(task, id, status)
+    .then(() => {
+      response.send(`Succesfully updated ID:${id} in the database`)
     })
     .catch((error) => {
+      response.sendStatus(500)
       console.error(error)
     })
 })
 
-function modfiyFileContent (fileContent, lineNumber, data) {
-  const lines = fileContent.split('\n')
-  if (lineNumber >= lines.length) {
-    return false
-  } else {
-    lines[lineNumber] = data
-    fileContent = lines.join('\n')
-    return fileContent
-  }
-}
-
-function deleteLine (fileContent, lineNumber) {
-  let lines = fileContent.split('\n')
-  if (lineNumber >= lines.length) {
-    return false
-  } else {
-    lines.splice(lineNumber, 1)
-    fileContent = lines.join('\n')
-    return fileContent
-  }
-}
 app.listen(8080)
