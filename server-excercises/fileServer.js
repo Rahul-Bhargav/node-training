@@ -4,6 +4,8 @@ var express = require('express')
 var app = express()
 const urlEncoder = bodyParser.urlencoded({ extended: false })
 
+app.use(express.static('public'))
+
 app.get('/', function (request, response) {
   response.send(`Use /read or / write`)
 })
