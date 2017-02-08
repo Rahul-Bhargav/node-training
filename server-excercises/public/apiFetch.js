@@ -110,7 +110,6 @@ function updateTask() {
   }
   data = {
     task: task,
-    status: status
   }
   id = idMap[id-1]
   fetch(`/update/${id}`, {
