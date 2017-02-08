@@ -24,6 +24,18 @@ function mapTasks(tasks) {
   })
 }
 
+function getTaskHTML(task) {
+  const escapedDescription = escapeHtml(task.description)
+  const checked = task.status ? "checked" : ""
+  let htmlContent = `
+        <tr>
+         <td><input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id},this.value)" ${checked}></td>
+        <td>${escapedDescription}</td>
+        <td><input type="button" id="${task.id}" value="delete" onclick="deleteTask(this.id)"></td>
+        </tr>`
+  return htmlContent
+}
+
 function getTasks() {
   return fetch('/read', { method: 'get' })
     .then(function (response) {
@@ -34,14 +46,7 @@ function getTasks() {
       listElement.innerHTML = ``
       mapTasks(tasks)
       tasks.forEach((task, index) => {
-        const escapedDescription = escapeHtml(task.description)
-        const checked = task.status ? "checked" : ""
-        listElement.innerHTML += `
-        <tr>
-         <td><input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id},this.value)" ${checked}></td>
-        <td>${escapedDescription}</td>
-        <td><input type="button" id="${task.id}" value="delete" onclick="deleteTask(this.id)"></td>
-        </tr>` // XSS
+        listElement.innerHTML += getTaskHTML(task)// XSS
         return true
       })
     })
@@ -51,7 +56,7 @@ function getTasks() {
 }
 
 function writeTask() {
-  const description = document.getElementById('description').value
+  const description = document.getElementById('taskInput').value
   const escapedDescription = escapeHtml(description)
   fetch(`/write/${escapedDescription}`, { method: 'post' })
     .then(function (response) {
@@ -111,7 +116,7 @@ function updateTask() {
   data = {
     task: task,
   }
-  id = idMap[id-1]
+  id = idMap[id - 1]
   fetch(`/update/${id}`, {
     method: 'put',
     body: JSON.stringify(data),
