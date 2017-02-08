@@ -22,7 +22,6 @@ app.get('/read', function (request, response) {
 })
 
 app.post('/write/:task', function (request, response) {
-  console.log('here')
   const task = request.params.task
   task.trim()
   if (!task || task === '') {
