@@ -2,7 +2,7 @@ const postgreDB = require('./dabataseInterface')
 const bodyParser = require('body-parser')
 var express = require('express')
 var app = express()
-const urlEncoder = bodyParser.urlencoded({ extended: false })
+const urlEncoder = bodyParser.json()
 
 app.use(express.static('public'))
 
@@ -46,7 +46,7 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
   }
   postgreDB.destroy(id)
     .then((result) => {
-      if (result[1].rowCount === 0) {
+      if (result.rowCount === 0) {
         response.sendStatus(500)
         console.log(`Delete Index does not exist`)
       }
@@ -59,11 +59,12 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
 })
 
 app.put('/update/:id', urlEncoder, function (request, response) {
+  console.log(request.body)
   if (!request.body) response.sendStatus(500)
   const task = request.body.task
   const status = request.body.status
   const id = request.params.id
-  if (!id || !task && !status) {
+  if (!id || !task && (status === null)) {
     response.sendStatus(500)
     return
   }
