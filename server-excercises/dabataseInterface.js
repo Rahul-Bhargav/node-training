@@ -7,7 +7,7 @@ const databaseOprations = {
     return sequelize.query(`INSERT INTO TASKS (DESCRIPTION) VALUES (:description)`, { replacements: {description: descriptionInput}, type: sequelize.QueryTypes.SELECT })
   },
   read: function () {
-    return sequelize.query(`SELECT ID,DESCRIPTION,STATUS FROM TASKS ORDER BY ID ASC`)
+    return sequelize.query(`SELECT ID,DESCRIPTION,STATUS FROM TASKS ORDER BY ID ASC`, { replacements: {}, type: sequelize.QueryTypes.SELECT })
   },
   update: function (descriptionInput, idInput, statusInput) {
     if (!descriptionInput) {
