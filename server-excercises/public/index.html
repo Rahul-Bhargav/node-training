@@ -4,12 +4,7 @@
     text-align: center;
   }
   #taskInput {
-    width: 600%;
-    padding: 12px 20px;
-    margin: auto;
-    display: inline-block;
-   	border:none;
-    box-sizing: border-box;
+    width: 60%;
   }
   #taskTable {
     border-collapse: collapse;
@@ -29,10 +24,12 @@
 <body onload="getTasks()">
   <h1>TODO</h1>
   <hr>
-  <div>
-    <input type="text" name="description" id="description" placeholder="Enter data to written into file"><br>
+  <center>
+  <div id="inputDiv">
+    <input type="text" name="description" id="taskInput" placeholder="What do you want to do"><br>
     <input type="button" value="Insert" onclick="writeTask()">
   </div>
+  </center>
   <br>
   <table id="taskTable">
   </table>
