@@ -1,58 +1,54 @@
 <html>
-<script>
-  function outputList () {
-    fetch('/read', {method: 'get'})
-    .then(function (response) {
-      console.log('here')
-      return response.json()
-    })
-    .then((tasks) =>{
-      const listElement = document.getElementById('taskList')
-      tasks.forEach((task) => {
-        listElement.innerHTML += `<li>${task.description}</li>`
-      })
-    })
-    .catch(function (err){
-      console.log(err)
-    })
+<style>
+  h1 {
+    text-align: center;
   }
-</script>
+  #taskInput {
+    width: 600%;
+    padding: 12px 20px;
+    margin: auto;
+    display: inline-block;
+   	border:none;
+    box-sizing: border-box;
+  }
+  #taskTable {
+    border-collapse: collapse;
+    width: 60%;
+    margin: auto;
+  }
+  
+  th,
+  td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+</style>
+</head>
 
-<body onload="outputList()">
+<body onload="getTasks()">
   <h1>TODO</h1>
-  <ol id = 'taskList'></ol>
-  <br>
   <hr>
-  <h2>POST - Insert Data</h2>
   <div>
-    <form name="createData" action="http://localhost:8080/write" method="post">
-      Content to add: <br>
-      <input type="text" name="data" placeholder="Enter data to written into file"><br>
-      <input type="submit" value="Submit">
-    </form>
+    <input type="text" name="description" id="description" placeholder="Enter data to written into file"><br>
+    <input type="button" value="Insert" onclick="writeTask()">
   </div>
   <br>
-  <hr>
-  <h2>UPDATE - Update Data</h2>
-  <div>
-    <form name="updateData" action="http://localhost:8080/update" method="post">
-      Line number:<br>
-      <input type="text" name="lineNumber" placeholder="Enter line number to be updated"><br> Content to add:<br>
-      <input type="text" id="data" name="data" placeholder="Enter data to write into file"><br>
-      <input type="submit" value="Submit">
-    </form>
-  </div>
+  <table id="taskTable">
+  </table>
   <br>
   <hr>
-  <h2>DELETE - Delete Data</h2>
+  <h2>UPDATE - Update Task</h2>
   <div>
-    <form name="deleteData" action="http://localhost:8080/destroy" method="post">
-      Line number:<br>
-      <input type="text" id="lineNumber" name="lineNumber" placeholder="Enter line number to delete from file"><br>
-      <input type="submit" value="Submit">
-    </form>
+    Line number:<br>
+    <input type="text" name="lineNumber" id="updateLine" placeholder="Enter line number to be updated"><br> Content to add:
+    <br>
+    <input type="text" id="updateDescription" name="Description" placeholder="Enter data "><br>
+    <input type="text" id="updateStatus" name="Status" placeholder="Enter status "><br>
+    <input type="button" value="Update" onclick="updateTask()">
   </div>
-  <hr>
+  <br>
+  <script src="apiFetch.js"></script>
 </body>
 
 </html>
