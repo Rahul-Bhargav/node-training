@@ -13,7 +13,7 @@ app.get('/', function (request, response) {
 app.get('/read', function (request, response) {
   postgreDB.read()
     .then((result) => {
-      response.json(result[0])
+      response.json(result)
     })
     .catch((error) => {
       response.sendStatus(500)
