@@ -31,6 +31,7 @@ function mapTasks(tasks) {
     return task.id
   })
 }
+//TODO: update and response
 //TODO: use modular DOM functions for add task update task delete task
 function getTaskHTML(task) {
   const escapedDescription = escapeHtml(task.description)
@@ -129,6 +130,9 @@ function updateTask(id) {
       "Content-Type": "application/json"
     }
   })
+    .then(() => {
+      return getTasks()
+    })
     .catch(function (err) {
       console.log(err)
     })
