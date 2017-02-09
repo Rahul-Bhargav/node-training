@@ -1,11 +1,11 @@
-/* eslint-disable */
-document.getElementById("taskInput")
-  .addEventListener("keyup", function (event) {
-    event.preventDefault();
-    if (event.keyCode == 13) {
+/* eslint-disable*/
+document.getElementById('taskInput')
+  .addEventListener('keyup', function (event) {
+    event.preventDefault()
+    if (event.keyCode === 13) {
       writeTask()
     }
-  });
+  })
 
 const entityMap = {
   '&': '&amp;',
@@ -18,46 +18,67 @@ const entityMap = {
   '=': '&#x3D;'
 }
 
-let idMap = []
-
 function escapeHtml(string) {
   return String(string).replace(/[&<>"'`=\/]/g, function (s) {
     return entityMap[s]
   })
 }
 
-function mapTasks(tasks) {
-  idMap = tasks.map((task) => {
-    return task.id
-  })
-}
-//TODO: update and response
-//TODO: use modular DOM functions for add task update task delete task
-function getTaskHTML(task) {
+function getTaskRow(task) {
   const escapedDescription = escapeHtml(task.description)
-  const checked = task.status ? "checked" : ""
+  const checked = task.status ? 'checked' : ''
   let htmlContent = `
-        <tr>
-         <td class="statusColoumn"><input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id},this.value)" ${checked}></td>
-        <td class="dataColoumn"><input type="text" value="${escapedDescription}" id="${task.id}-desc" onfocusout="updateTask(${task.id})"></td>
-        <td class="deleteColoumn"><input type="button" id="${task.id}" value="delete" onclick="deleteTask(this.id)"></td>
+        <tr id=${task.id}>
+          <td class="statusColoumn">
+            <input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id})" ${checked}></td>
+          <td class="dataColoumn">
+            <input type="text" value="${escapedDescription}" id="${task.id}-desc" onfocusout="updateTask(${task.id})">
+          </td>
+          <td class="deleteColoumn">
+            <input type="button" id="${task.id}-delete" value="delete" onclick="deleteTask(${task.id})">
+          </td>
         </tr>`
   return htmlContent
 }
 
-function getTasks() {
+function updateTaskView(id, description, status) {
+  const taskDescription = document.getElementById(`${id}-desc`)
+  const taskStatus = document.getElementById(`${id}-status`)
+  if (description){ 
+    taskDescription.value = description; 
+  }
+  if (status){ 
+    taskStatus.value = status; 
+  }
+}
+
+function appendTaskView(task) {
+  const taskTable = document.getElementById('taskTable')
+  taskTable.innerHTML += getTaskRow(task)
+}
+
+function deleteTaskView(id) {
+  const task = document.getElementById(id)
+  task.parentNode.removeChild(task)
+}
+
+function populateList(tasks) {
+  const taskTable = document.getElementById('taskTable')
+  tasks.forEach((task) => {
+    taskTable.innerHTML += getTaskRow(task)
+  })
+}
+// TODO: strike through
+// TODO: update and response
+// TODO: use modular DOM functions for add task update task delete task
+
+function readTasks() {
   return fetch('/read', { method: 'get' })
     .then(function (response) {
       return response.json()
     })
     .then((tasks) => {
-      const listElement = document.getElementById('taskTable')
-      listElement.innerHTML = ``
-      mapTasks(tasks)
-      tasks.forEach((task, index) => {
-        listElement.innerHTML += getTaskHTML(task)// XSS
-        return true
-      })
+      populateList(tasks)
     })
     .catch(function (err) {
       console.log(err)
@@ -66,11 +87,19 @@ function getTasks() {
 
 function writeTask() {
   const description = document.getElementById('taskInput').value
-  document.getElementById("taskInput").value = ''
+  document.getElementById('taskInput').value = ''
+  description.trim()
+  if (!description || description === '') {
+    return
+  }
   const escapedDescription = escapeHtml(description)
   fetch(`/write/${escapedDescription}`, { method: 'post' })
-    .then(() => {
-      return getTasks()
+    .then((response) => {
+      return response.json()
+    })
+    .then((taskID) => {
+      const task = { id: taskID[0].id, description: escapedDescription, status: false }
+      appendTaskView(task);
     })
     .catch(function (err) {
       console.log(err)
@@ -78,25 +107,19 @@ function writeTask() {
 }
 
 function deleteTask(id) {
-  if (isNaN(id)) {
-    alert('Invalid ID' + id)
-    return
-  }
   fetch(`/destroy/${id}`, { method: 'delete' })
     .then(() => {
-      return getTasks()
+      deleteTaskView(id)
     })
     .catch(function (err) {
       console.log(err)
     })
 }
 
-function updateStatus(id, status) {
-  if (isNaN(id)) {
-    alert('Invalid ID')
-    return
-  }
-  status = (status === 'false') ? true : false;
+function updateStatus(id) {
+  statusElement = document.getElementById(`${id}-status`).value
+  let status = statusElement.value
+  status = (status === 'false')? true:false
   data = {
     status: status
   }
@@ -104,34 +127,33 @@ function updateStatus(id, status) {
     method: 'put',
     body: JSON.stringify(data),
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     }
   })
+    .then(() => {
+      updateTaskView(id, null, status)
+    })
     .catch(function (err) {
       console.log(err)
     })
 }
 
 function updateTask(id) {
-  const task = document.getElementById(`${id}-desc`).value
-  if (isNaN(id)) {
-    alert('Invalid ID')
-    return
-  }
+  const description = document.getElementById(`${id}-desc`).value
   data = {
-    task: task,
+    task: description
   }
   fetch(`/update/${id}`, {
     method: 'put',
     body: JSON.stringify(data),
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     }
   })
     .then(() => {
-      return getTasks()
+      updateTaskView(id, description, null)
     })
     .catch(function (err) {
       console.log(err)
