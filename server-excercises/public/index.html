@@ -4,6 +4,18 @@
     text-align: center;
   }
   
+  #addTask {
+    background-color:white;
+    border-radius: 5px;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
   .todoMain {
     width: 50%;
     margin: auto;
@@ -105,7 +117,7 @@
           <input type="text" name="description" class="taskInput" id="taskInput" placeholder="What do you want to do" onfocusout="writeTask()">
         </td>
         <td>
-          <!--<input type="button" value="Insert" id="addTask" class="addTask" onclick="writeTask()">-->
+          <input type="button" value="➕" id="addTask" class="addTask" onclick="writeTask()">
         </td>
       </tr>
     </table>
