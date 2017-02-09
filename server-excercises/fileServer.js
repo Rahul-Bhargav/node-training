@@ -29,8 +29,8 @@ app.post('/write/:task', function (request, response) {
     return
   }
   postgreDB.insert(task)
-    .then(() => {
-      response.send(`Succesfully added ${task} to the database`)
+    .then((result) => {
+      response.send(result)
     })
     .catch((error) => {
       response.sendStatus(500)
@@ -45,12 +45,8 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
     return
   }
   postgreDB.destroy(id)
-    .then((result) => {
-      if (result.rowCount === 0) {
-        response.sendStatus(500)
-        console.log(`Delete Index does not exist`)
-      }
-      response.send(`Succesfully deleted ID:${id} from the database`)
+    .then(() => {
+      response.send('Deleted')
     })
     .catch((error) => {
       response.sendStatus(500)
@@ -59,7 +55,6 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
 })
 
 app.put('/update/:id', urlEncoder, function (request, response) {
-  console.log(request.body)
   if (!request.body) response.sendStatus(500)
   const task = request.body.task
   const status = request.body.status
@@ -70,7 +65,7 @@ app.put('/update/:id', urlEncoder, function (request, response) {
   }
   postgreDB.update(task, id, status)
     .then(() => {
-      response.send(`Succesfully updated ID:${id} in the database`)
+      response.send('Updated')
     })
     .catch((error) => {
       response.sendStatus(500)
