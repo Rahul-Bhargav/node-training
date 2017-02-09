@@ -3,48 +3,117 @@
   h1 {
     text-align: center;
   }
-  #taskInput {
-    width: 60%;
+  
+  .todoMain {
+    width: 50%;
+    margin: auto;
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow: 3px 3px 5px 6px #ccc;
+    /* Firefox 3.5 - 3.6 */
+    box-shadow: 3px 3px 5px 6px #ccc;
+    /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
   }
-  #taskTable {
+  
+  .dataColoumn {
+    width: 100%;
+  }
+  
+  .statusColoumn {
+    font-size: 30px;
+  }
+  
+  .taskTable {
     border-collapse: collapse;
-    width: 60%;
+    width: 80%;
     margin: auto;
   }
   
-  th,
-  td {
+  tr .deleteColoumn {
+    display: none;
+  }
+  
+  tr:hover .deleteColoumn {
+    display: inline;
+  }
+  
+  input[type='checkbox'] {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 5px;
+    border: 2px solid #555;
+  }
+  
+  input[type='button'] {
+    background-color: #737373;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  input[type='checkbox']:hover {
+    background: #d9d9d9;
+  }
+  
+  input[type='checkbox']:checked {
+    background: #737373;
+  }
+  
+  input[type=text] {
+    font-size: 17px;
+    width: 95%;
+    margin: auto;
     text-align: left;
-    padding: 8px;
-    border: 1px solid #ddd;
+    padding: 8px 12px;
+    display: inline-block;
+    border: none;
+    box-sizing: border-box;
+  }
+  
+  :focus {
+    outline: none;
+    border: none;
+  }
+  
+  td {
+    /*border: 1px solid black;*/
+    margin: auto;
+    padding: 8px 0px;
+    white-space: nowrap;
   }
 </style>
 </head>
 
 <body onload="getTasks()">
   <h1>TODO</h1>
-  <hr>
-  <center>
-  <div id="inputDiv">
-    <input type="text" name="description" id="taskInput" placeholder="What do you want to do"><br>
-    <input type="button" value="Insert" onclick="writeTask()">
-  </div>
-  </center>
-  <br>
-  <table id="taskTable">
-  </table>
-  <br>
-  <hr>
-  <h2>UPDATE - Update Task</h2>
-  <div>
-    Line number:<br>
-    <input type="text" name="lineNumber" id="updateLine" placeholder="Enter line number to be updated"><br> Content to add:
+  <div class="todoMain">
+    <!--TODO : overflow-x:auto-->
+    <table class="taskTable">
+      <tr>
+        <td class="statusColoumn">
+          <p>👉🏽 </p>
+        </td>
+        <td class="dataColoumn">
+          <input type="text" name="description" class="taskInput" id="taskInput" placeholder="What do you want to do" onfocusout="writeTask()">
+        </td>
+        <td>
+          <!--<input type="button" value="Insert" id="addTask" class="addTask" onclick="writeTask()">-->
+        </td>
+      </tr>
+    </table>
     <br>
-    <input type="text" id="updateDescription" name="Description" placeholder="Enter data "><br>
-    <input type="text" id="updateStatus" name="Status" placeholder="Enter status "><br>
-    <input type="button" value="Update" onclick="updateTask()">
+    <table class="taskTable" id="taskTable">
+    </table>
+    <br>
   </div>
-  <br>
   <script src="apiFetch.js"></script>
 </body>
 
