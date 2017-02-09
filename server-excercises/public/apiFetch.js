@@ -1,4 +1,12 @@
 /* eslint-disable */
+document.getElementById("taskInput")
+  .addEventListener("keyup", function (event) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+      writeTask()
+    }
+  });
+
 const entityMap = {
   '&': '&amp;',
   '<': '&lt;',
@@ -23,15 +31,15 @@ function mapTasks(tasks) {
     return task.id
   })
 }
-
+//TODO: use modular DOM functions for add task update task delete task
 function getTaskHTML(task) {
   const escapedDescription = escapeHtml(task.description)
   const checked = task.status ? "checked" : ""
   let htmlContent = `
         <tr>
-         <td><input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id},this.value)" ${checked}></td>
-        <td>${escapedDescription}</td>
-        <td><input type="button" id="${task.id}" value="delete" onclick="deleteTask(this.id)"></td>
+         <td class="statusColoumn"><input type="checkbox" id="${task.id}-status" value="${task.status}" onchange="updateStatus(${task.id},this.value)" ${checked}></td>
+        <td class="dataColoumn"><input type="text" value="${escapedDescription}" id="${task.id}-desc" onfocusout="updateTask(${task.id})"></td>
+        <td class="deleteColoumn"><input type="button" id="${task.id}" value="delete" onclick="deleteTask(this.id)"></td>
         </tr>`
   return htmlContent
 }
@@ -57,9 +65,10 @@ function getTasks() {
 
 function writeTask() {
   const description = document.getElementById('taskInput').value
+  document.getElementById("taskInput").value = ''
   const escapedDescription = escapeHtml(description)
   fetch(`/write/${escapedDescription}`, { method: 'post' })
-    .then(function (response) {
+    .then(() => {
       return getTasks()
     })
     .catch(function (err) {
@@ -73,7 +82,7 @@ function deleteTask(id) {
     return
   }
   fetch(`/destroy/${id}`, { method: 'delete' })
-    .then(function (response) {
+    .then(() => {
       return getTasks()
     })
     .catch(function (err) {
@@ -98,17 +107,13 @@ function updateStatus(id, status) {
       "Content-Type": "application/json"
     }
   })
-    .then(function (response) {
-      return getTasks()
-    })
     .catch(function (err) {
       console.log(err)
     })
 }
 
-function updateTask() {
-  let id = document.getElementById('updateLine').value
-  const task = document.getElementById('updateDescription').value
+function updateTask(id) {
+  const task = document.getElementById(`${id}-desc`).value
   if (isNaN(id)) {
     alert('Invalid ID')
     return
@@ -116,7 +121,6 @@ function updateTask() {
   data = {
     task: task,
   }
-  id = idMap[id - 1]
   fetch(`/update/${id}`, {
     method: 'put',
     body: JSON.stringify(data),
@@ -125,9 +129,6 @@ function updateTask() {
       "Content-Type": "application/json"
     }
   })
-    .then(function (response) {
-      return getTasks()
-    })
     .catch(function (err) {
       console.log(err)
     })
