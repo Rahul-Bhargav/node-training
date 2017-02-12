@@ -65,6 +65,12 @@ app.TodoListOperations.addEvents = function () {
 
 app.TodoListOperations.addGlobalEvents = function () {
   // Insert Task
+  document.getElementById('task-text').addEventListener('keyup', (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault()
+      app.TodoListOperations.insertNewTask()
+    }
+  })
   document.getElementById('insert-task').addEventListener('click', (e) => {
     app.TodoListOperations.insertNewTask()
   })
