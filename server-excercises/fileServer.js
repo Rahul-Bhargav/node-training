@@ -54,6 +54,35 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
     })
 })
 
+app.delete('/destroycompleted', urlEncoder, function (request, response) {
+  postgreDB.destroyCompleted()
+    .then(() => {
+      response.send('Deleted')
+    })
+    .catch((error) => {
+      response.sendStatus(500)
+      console.error(error)
+    })
+})
+
+app.put('/updateall', urlEncoder, function (request, response) {
+  if (!request.body) response.sendStatus(500)
+  const status = request.body.status
+
+  if ((status === null || status === undefined)) {
+    response.sendStatus(500)
+    return
+  }
+  postgreDB.updateAll(status)
+    .then(() => {
+      response.send('Updated')
+    })
+    .catch((error) => {
+      response.sendStatus(500)
+      console.error(error)
+    })
+})
+
 app.put('/update/:id', urlEncoder, function (request, response) {
   if (!request.body) response.sendStatus(500)
   const task = request.body.task

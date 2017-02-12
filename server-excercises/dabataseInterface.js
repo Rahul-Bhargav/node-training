@@ -13,13 +13,19 @@ const databaseOprations = {
     if (!descriptionInput) {
       return sequelize.query(`UPDATE TASKS SET STATUS = :status WHERE ID = :id`, { replacements: { status: statusInput, id: idInput }, type: sequelize.QueryTypes.UPDATE })
     }
-    if (!statusInput) {
+    if (statusInput === null || statusInput === undefined) {
       return sequelize.query(`UPDATE TASKS SET DESCRIPTION = :description WHERE ID = :id`, { replacements: { description: descriptionInput, id: idInput }, type: sequelize.QueryTypes.UPDATE })
     }
     return sequelize.query(`UPDATE TASKS SET DESCRIPTION = :description, STATUS = :status WHERE ID = :id`, { replacements: { status: statusInput, description: descriptionInput, id: idInput }, type: sequelize.QueryTypes.UPDATE })
   },
+  updateAll: function (status) {
+    return sequelize.query(`UPDATE TASKS SET STATUS=:status`, { replacements: { status: status }, type: sequelize.QueryTypes.UPDATE })
+  },
   destroy: function (idInput) {
     return sequelize.query(`DELETE FROM TASKS WHERE ID=:id`, { replacements: { id: idInput }, type: sequelize.QueryTypes.DELETE })
+  },
+  destroyCompleted: function (idInput) {
+    return sequelize.query(`DELETE FROM TASKS WHERE STATUS=true`, { type: sequelize.QueryTypes.DELETE })
   }
 }
 

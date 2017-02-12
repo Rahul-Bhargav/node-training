@@ -1,132 +1,60 @@
 <html>
 <style>
-  h1 {
-    text-align: center;
-  }
-  
-  #addTask {
-    background-color:white;
-    border-radius: 5px;
-    border: none;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .todoMain {
-    width: 50%;
-    margin: auto;
-    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-    /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-    -moz-box-shadow: 3px 3px 5px 6px #ccc;
-    /* Firefox 3.5 - 3.6 */
-    box-shadow: 3px 3px 5px 6px #ccc;
-    /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-  }
-  
-  .dataColoumn {
-    width: 100%;
-  }
-  
-  .statusColoumn {
-    font-size: 30px;
-  }
-  
-  .taskTable {
-    /*border-collapse: collapse;*/
-    width: 80%;
-    margin: auto;
-  }
-  
-  tr .deleteColoumn {
-    display: none;
-  }
-  
-  tr:hover .deleteColoumn {
-    display: inline;
-  }
-  
-  input[type='checkbox'] {
-    -webkit-appearance: none;
-    width: 26px;
-    height: 26px;
-    background: white;
-    border-radius: 5px;
-    border: 2px solid #555;
-  }
-  
-  input[type='button'] {
-    background-color: #737373;
-    border-radius: 5px;
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  input[type='checkbox']:hover {
-    background: #d9d9d9;
-  }
-  
-  input[type='checkbox']:checked {
-    background: #737373;
-  }
-  
-  input[type=text] {
-    font-size: 17px;
-    width: 95%;
-    margin: auto;
-    text-align: left;
-    padding: 8px 12px;
-    display: inline-block;
-    border: none;
-    box-sizing: border-box;
-  }
-  
-  :focus {
-    outline: none;
-    border: none;
-  }
-  
-  td {
-    /*border: 1px solid black;*/
-    margin: auto;
-    padding: 8px 0px;
-    white-space: nowrap;
-  }
+.clear-completed-hidden {
+  display: none
+}
+
+.clear-completed-show {
+  display: inline
+}
 </style>
 </head>
 
-<body onload="readTasks()">
+<body onload="onLoad()">
   <h1>TODO</h1>
   <div class="todoMain">
     <!--TODO : overflow-x:auto-->
-    <table class="taskTable">
+    <table class="table-table">
       <tr>
-        <td class="statusColoumn">
-          <p>👉🏽 </p>
+        <td class="table-select-all">
+          <input type="checkbox" name="toggle-all" id="toggle-all">
         </td>
         <td class="dataColoumn">
-          <input type="text" name="description" class="taskInput" id="taskInput" placeholder="What do you want to do" onfocusout="writeTask()">
+          <input type="text" name="description" class="task-input" id="task-text" placeholder="What do you want to do">
         </td>
         <td>
-          <input type="button" value="➕" id="addTask" class="addTask" onclick="writeTask()">
+          <input type="button" value="➕" id="insert-task" class="add-task">
         </td>
       </tr>
     </table>
     <br>
-    <table class="taskTable" id="taskTable">
+    <table class="task-table" id="task-table">
     </table>
     <br>
+    <div class="list-options">
+      <div class="items-left">
+        <p id="task count"></p>
+      </div>
+      <div class="list-filters">
+        <div class="all">
+          <input type="button" value="All" id="select-all">
+        </div>
+        <div class="active">
+          <input type="button" value="Active" id="select-active">
+        </div>
+        <div class="completed">
+          <input type="button" value="Completed" id="select-completed">
+        </div>
+        <div class="clear-completed-hidden">
+          <input type="button" value="Clear completed" id="clear-completed">
+        </div>
+      </div>
+    </div>
   </div>
-  <script src="apiFetch.js"></script>
+  <script src="app.js"></script>
+  <script src="TodoItem.js"></script>
+  <script src="TodoList.js"></script>
+  <script src="api.js"></script>
 </body>
 
 </html>

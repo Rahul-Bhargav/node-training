@@ -1,8 +1,6 @@
 class TodoItem {
-  constructor (id, description, status, parentList) {
-    this.parentList = parentList
+  constructor (id, description, status) {
     this.createRowItems(id, description, status)
-    this.addEvents()
   }
 
   onDoubleClick () {
@@ -12,10 +10,12 @@ class TodoItem {
   }
 
   onBlur () {
-    this.task.readOnly = true
-    app.api.updateStatus(this.element.id, this.task.value, this.status.checked)
+    let task = app.escapeHtml(this.task.value)
+    app.api.updateTask(this.element.id, task, this.status.checked)
       .then(() => {
-        this._unSavedDescription = this.task.value
+        this._unSavedDescription = task
+        this.task.value = task
+        this.task.readOnly = true
       })
       .catch(() => {
         alert('Error:could not update')
@@ -27,17 +27,20 @@ class TodoItem {
     app.api.updateTask(this.element.id, this.task.value, this.status.checked)
       .then(() => {
         this._unSavedStatus = this.status.checked
+        app.TodoListOperations.setToggle()
+        app.updateLists()
       })
       .catch(() => {
+        alert('Error:could not update')
         this.status.checked = this._unSavedStatus
       })
   }
 
   onDelete () {
-    return app.api.deleteTask(this.id)
+    return app.api.deleteTask(this.element.id)
   }
 
-  createRowItems (id, status, description) {
+  createRowItems (id, description, status) {
     this.element = document.createElement('tr')
     this.element.setAttribute('id', id)
 
@@ -45,7 +48,7 @@ class TodoItem {
     this.status = document.createElement('input')
     this.status.setAttribute('type', 'checkbox')
     this.status.setAttribute('name', 'staus')
-    this.status.setAttribute('checked', status)
+    this.status.checked = status
     this._unSavedStatus = status
     statusData.appendChild(this.status)
 
@@ -54,6 +57,7 @@ class TodoItem {
     this.task.setAttribute('type', 'text')
     this.task.setAttribute('name', 'description')
     this.task.setAttribute('value', description)
+    this.task.setAttribute('readonly', true)
     this._unSavedDescription = description
     taskData.appendChild(this.task)
 
