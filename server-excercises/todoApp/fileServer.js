@@ -1,4 +1,4 @@
-const postgreDB = require('./dabataseInterface')
+const postgreDB = require('./databaseInterface')
 const bodyParser = require('body-parser')
 var express = require('express')
 var app = express()
