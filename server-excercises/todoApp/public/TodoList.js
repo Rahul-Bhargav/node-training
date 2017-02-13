@@ -1,25 +1,24 @@
 app.TodoListOperations.deleteItemFromList = function (todo) {
   app.allTodos = app.allTodos.filter((item) => item.element.id !== todo.element.id)
   app.updateLists()
+  app.updateHiddenDivisions()
 }
 
 app.TodoListOperations.deleteCompletedFromList = function () {
   // const tempList = app.allTodos
   console.log(app.allTodos)
   app.allTodos = app.allTodos.filter((todo, index) => {
-    if (todo.status.checked) {
-      // app.allTodos.splice(index, 1)
-      app.removeChild(todo.element)
-      return false
-    } else return true
+    return !(todo.status.checked)
   })
   console.log(app.allTodos)
   app.updateLists()
+  app.updateHiddenDivisions()
 }
 
 app.TodoListOperations.insertIntoList = function (id, description, status) {
   const todo = new TodoItem(id, description, status)
   app.allTodos.push(todo)
+  app.updateHiddenDivisions()
   return todo
 }
 
@@ -43,6 +42,7 @@ app.TodoListOperations.initiateList = () => {
       app.updateLists()
       app.TodoListOperations.addEvents()
       app.TodoListOperations.setToggle()
+      app.updateHiddenDivisions()
     })
 }
 
@@ -54,9 +54,10 @@ app.TodoListOperations.insertNewTask = function () {
       document.getElementById('task-text').value = ''
       const todo = app.TodoListOperations.insertIntoList(response[0].id, description, false)
       app.TodoListOperations.addTodoItemEvents(todo)
-      app.appendChild(todo.element)
+      // app.appendChild(todo.element)
       app.TodoListOperations.setToggle()
       app.updateLists()
+      app.updateHiddenDivisions()
     })
 }
 
@@ -75,9 +76,9 @@ app.TodoListOperations.addGlobalEvents = function () {
       app.TodoListOperations.insertNewTask()
     }
   })
-  document.getElementById('insert-task').addEventListener('click', (e) => {
-    app.TodoListOperations.insertNewTask()
-  })
+  // document.getElementById('insert-task').addEventListener('click', (e) => {
+  //   app.TodoListOperations.insertNewTask()
+  // })
   // Update all
   document.getElementById('toggle-all').addEventListener('change', (e) => {
     const status = e.target.checked
@@ -94,18 +95,18 @@ app.TodoListOperations.addGlobalEvents = function () {
         app.TodoListOperations.setToggle()
       })
   })
-  // Display all Tasks
-  document.getElementById('select-all').addEventListener('click', (e) => {
-    location.hash = '/all'
-  })
-  // Display Active Tasks
-  document.getElementById('select-active').addEventListener('click', (e) => {
-    location.hash = '/active'
-  })
-  // Display Completed Tasks
-  document.getElementById('select-completed').addEventListener('click', (e) => {
-    location.hash = '/completed'
-  })
+  // // Display all Tasks
+  // document.getElementById('select-all').addEventListener('click', (e) => {
+  //   location.hash = '/all'
+  // })
+  // // Display Active Tasks
+  // document.getElementById('select-active').addEventListener('click', (e) => {
+  //   location.hash = '/active'
+  // })
+  // // Display Completed Tasks
+  // document.getElementById('select-completed').addEventListener('click', (e) => {
+  //   location.hash = '/completed'
+  // })
 }
 
 app.TodoListOperations.addTodoItemEvents = function (item) {
@@ -115,7 +116,7 @@ app.TodoListOperations.addTodoItemEvents = function (item) {
       .then(() => {
         app.TodoListOperations.deleteItemFromList(item)
         app.TodoListOperations.setToggle()
-        app.removeChild(item.element)
+        // app.removeChild(item.element)
       })
       .catch((error) => {
         console.log(error)

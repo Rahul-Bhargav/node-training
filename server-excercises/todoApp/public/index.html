@@ -3,51 +3,31 @@
 </head>
 
 <body onload="onLoad()">
-  <div class="todo-main">
-    <div class="header">
-      <h1>todos</h1>
-    </div>
-    <div class="content">
-      <div class="input-task-table">
-        <table class="task-table">
-          <tr class="row-container">
-            <td class="checkbox">
-              <input type="checkbox" name="toggle-all" id="toggle-all">
-            </td>
-            <td class="data">
-              <input type="text" name="description" class="task-input" id="task-text" placeholder="What do you want to do">
-            </td>
-            <td class="button">
-              <input type="button" value="➕" id="insert-task" class="add-task">
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="task-table">
-        <table class="table" id="task-table">
-        </table>
-      </div>
-      <div class="list-options">
-        <div class="items-left">
-          <p id="task-count">items left</p>
-        </div>
-        <div class="list-filters">
-          <div class="all">
-            <input type="button" value="All" id="select-all">
-          </div>
-          <div class="active">
-            <input type="button" value="Active" id="select-active">
-          </div>
-          <div class="completed">
-            <input type="button" value="Completed" id="select-completed">
-          </div>
-        </div>
-        <div class="clear-completed-hidden">
-          <input type="button" value="Clear completed" id="clear-completed">
-        </div>
-      </div>
-    </div>
-  </div>
+  <section class="todoapp">
+    <header class="header">
+       <h1>todos</h1>
+      <input class="toggle-all" type="checkbox" id="toggle-all">
+      <label for="toggle-all">Mark all as complete</label>
+      <input class="new-todo" placeholder="What needs to be done?" autofocus="" id="task-text">
+    </header>
+    <section class="main" style="display: block;">
+      <ul class="todo-list" id="todo-list">
+      </ul>
+    </section>
+    <footer class="footer" id="todoapp-footer">
+      <span class="todo-count" id="todo-count"></span>
+      <ul class="filters">
+        <li><a href="#/" class="selected">All</a></li>
+        <li> <a href="#/active">Active</a></li>
+        <li><a href="#/completed" class="">Completed</a></li>
+      </ul>
+      <button class="clear-completed-show" id="clear-completed">Clear completed</button>
+    </footer>
+  </section>
+  <footer class="info">
+      <p>Double-click to edit a todo</p>
+      <p>Created by Rahul</p>
+  </footer>
   <script src="app.js"></script>
   <script src="TodoItem.js"></script>
   <script src="TodoList.js"></script>
