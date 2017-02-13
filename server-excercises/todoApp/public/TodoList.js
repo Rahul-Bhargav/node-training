@@ -4,12 +4,16 @@ app.TodoListOperations.deleteItemFromList = function (todo) {
 }
 
 app.TodoListOperations.deleteCompletedFromList = function () {
-  app.allTodos.forEach((todo, index) => {
+  // const tempList = app.allTodos
+  console.log(app.allTodos)
+  app.allTodos = app.allTodos.filter((todo, index) => {
     if (todo.status.checked) {
-      app.allTodos.splice(index, 1)
+      // app.allTodos.splice(index, 1)
       app.removeChild(todo.element)
-    }
+      return false
+    } else return true
   })
+  console.log(app.allTodos)
   app.updateLists()
 }
 

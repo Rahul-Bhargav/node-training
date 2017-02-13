@@ -43,8 +43,10 @@ class TodoItem {
   createRowItems (id, description, status) {
     this.element = document.createElement('tr')
     this.element.setAttribute('id', id)
+    this.element.setAttribute('class', 'row-container')
 
     const statusData = document.createElement('td')
+    statusData.setAttribute('class', 'checkbox')
     this.status = document.createElement('input')
     this.status.setAttribute('type', 'checkbox')
     this.status.setAttribute('name', 'staus')
@@ -53,15 +55,18 @@ class TodoItem {
     statusData.appendChild(this.status)
 
     const taskData = document.createElement('td')
+    taskData.setAttribute('class', 'data')
     this.task = document.createElement('input')
     this.task.setAttribute('type', 'text')
     this.task.setAttribute('name', 'description')
+    this.task.setAttribute('class', 'task-input')
     this.task.setAttribute('value', description)
     this.task.setAttribute('readonly', true)
     this._unSavedDescription = description
     taskData.appendChild(this.task)
 
     const removeData = document.createElement('td')
+    removeData.setAttribute('class', 'button')
     this.removeButton = document.createElement('input')
     this.removeButton.setAttribute('type', 'button')
     this.removeButton.setAttribute('name', 'remove')

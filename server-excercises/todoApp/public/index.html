@@ -1,49 +1,46 @@
 <html>
-<style>
-.clear-completed-hidden {
-  display: none
-}
-
-.clear-completed-show {
-  display: inline
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body onload="onLoad()">
-  <h1>TODO</h1>
-  <div class="todoMain">
-    <!--TODO : overflow-x:auto-->
-    <table class="table-table">
-      <tr>
-        <td class="table-select-all">
-          <input type="checkbox" name="toggle-all" id="toggle-all">
-        </td>
-        <td class="dataColoumn">
-          <input type="text" name="description" class="task-input" id="task-text" placeholder="What do you want to do">
-        </td>
-        <td>
-          <input type="button" value="➕" id="insert-task" class="add-task">
-        </td>
-      </tr>
-    </table>
-    <br>
-    <table class="task-table" id="task-table">
-    </table>
-    <br>
-    <div class="list-options">
-      <div class="items-left">
-        <p id="task count"></p>
+  <div class="todo-main">
+    <div class="header">
+      <h1>todos</h1>
+    </div>
+    <div class="content">
+      <div class="input-task-table">
+        <table class="task-table">
+          <tr class="row-container">
+            <td class="checkbox">
+              <input type="checkbox" name="toggle-all" id="toggle-all">
+            </td>
+            <td class="data">
+              <input type="text" name="description" class="task-input" id="task-text" placeholder="What do you want to do">
+            </td>
+            <td class="button">
+              <input type="button" value="➕" id="insert-task" class="add-task">
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="list-filters">
-        <div class="all">
-          <input type="button" value="All" id="select-all">
+      <div class="task-table">
+        <table class="table" id="task-table">
+        </table>
+      </div>
+      <div class="list-options">
+        <div class="items-left">
+          <p id="task-count">items left</p>
         </div>
-        <div class="active">
-          <input type="button" value="Active" id="select-active">
-        </div>
-        <div class="completed">
-          <input type="button" value="Completed" id="select-completed">
+        <div class="list-filters">
+          <div class="all">
+            <input type="button" value="All" id="select-all">
+          </div>
+          <div class="active">
+            <input type="button" value="Active" id="select-active">
+          </div>
+          <div class="completed">
+            <input type="button" value="Completed" id="select-completed">
+          </div>
         </div>
         <div class="clear-completed-hidden">
           <input type="button" value="Clear completed" id="clear-completed">
