@@ -2,7 +2,7 @@ const app = {}
 app.todoList = []
 app.allTodos = []
 app.TodoListOperations = {}
-
+app.page = ''
 app.entityMap = {
   '&': '&amp;',
   '<': '&lt;',
@@ -42,11 +42,9 @@ app.updateLists = function () {
 // }
 
 app.setView = function () {
-  const route = location.hash.split('/')[1]
-  var page = route || ''
   document.querySelector('.filters .selected').className = ''
-  document.querySelector('.filters [href="#/' + page + '"]').className = 'selected'
-  app.todoList = app.listTypes[page]()
+  document.querySelector('.filters [href="#/' + app.page + '"]').className = 'selected'
+  app.todoList = app.listTypes[app.page]()
 }
 
 app.populateTable = function () {
@@ -58,8 +56,12 @@ app.populateTable = function () {
 }
 
 app.onHashChange = function () {
-  app.updateLists()
+  const route = location.hash.split('/')[1]
+  app.page = route || ''
+  app.setView()
   app.populateTable()
+  app.setClearCompleted()
+  app.updateCount()
 }
 
 app.setClearCompleted = function () {
