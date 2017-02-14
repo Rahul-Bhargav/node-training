@@ -6,6 +6,7 @@ class TodoItem {
 
   onDoubleClick () {
     this.task.readOnly = false
+    this.task.focus()
     this._unSavedDescription = this.task.value
     this.task.setAttribute('class', 'edit')
     this.hideCheckBox(true)
@@ -81,6 +82,7 @@ class TodoItem {
     this.removeButton = document.createElement('button')
     this.removeButton.setAttribute('name', 'remove')
     this.removeButton.setAttribute('class', 'destroy')
+
 
     divisionElement.appendChild(this.status)
     divisionElement.appendChild(this.task)
