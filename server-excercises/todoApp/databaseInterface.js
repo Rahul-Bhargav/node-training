@@ -1,6 +1,6 @@
 const Sequelize = require('Sequelize')
 
-const dbName = process.env.DEV_MODE === 'test' ? 'test' : 'Excercise'
+const dbName = process.env.DEV_MODE === 'test' ? 'testdb' : 'Excercise'
 
 const sequelize = new Sequelize('postgres://rahulsurabhi:rah1161!@localhost:5432/' + dbName)
 
