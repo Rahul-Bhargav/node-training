@@ -83,7 +83,6 @@ class TodoItem {
     this.removeButton.setAttribute('name', 'remove')
     this.removeButton.setAttribute('class', 'destroy')
 
-
     divisionElement.appendChild(this.status)
     divisionElement.appendChild(this.task)
     divisionElement.appendChild(this.removeButton)
