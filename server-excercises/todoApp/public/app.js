@@ -69,7 +69,7 @@ app.setClearCompleted = function () {
 
 app.updateCount = function () {
   const paragraphElement = document.getElementById('todo-count')
-  const itemsLeft = app.allTodos.length - app.listTypes['completed'].length
+  const itemsLeft = app.allTodos.length - app.listTypes['completed']().length
   paragraphElement.innerHTML = (itemsLeft === 1) ? `1 item left` : `${itemsLeft} items left`
 }
 
