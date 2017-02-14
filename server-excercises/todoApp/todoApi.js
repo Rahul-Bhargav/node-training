@@ -57,7 +57,7 @@ app.delete('/destroy/:id', urlEncoder, function (request, response) {
 app.delete('/destroycompleted', urlEncoder, function (request, response) {
   postgreDB.destroyCompleted()
     .then(() => {
-      response.send('Deleted')
+      response.send('Delete completed')
     })
     .catch((error) => {
       response.sendStatus(500)
@@ -75,7 +75,7 @@ app.put('/updateall', urlEncoder, function (request, response) {
   }
   postgreDB.updateAll(status)
     .then(() => {
-      response.send('Updated')
+      response.send('Updated all')
     })
     .catch((error) => {
       response.sendStatus(500)
