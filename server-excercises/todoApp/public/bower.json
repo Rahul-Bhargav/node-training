@@ -1,0 +1,18 @@
+{
+  "name": "package",
+  "homepage": "https://github.com/Rahul-Bhargav/node-training",
+  "authors": [
+    "Rahul Surabhi <rahul.surabhi09@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
