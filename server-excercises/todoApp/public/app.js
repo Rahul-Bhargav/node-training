@@ -1,8 +1,6 @@
 const app = {}
 app.todoList = []
 app.allTodos = []
-app.completedTodos = []
-app.activeTodos = []
 app.TodoListOperations = {}
 
 app.entityMap = {
@@ -24,8 +22,8 @@ app.escapeHtml = function (string) {
 
 app.listTypes = {
   '': () => app.allTodos,
-  'active': () => app.activeTodos,
-  'completed': () => app.completedTodos
+  'active': () => app.allTodos.filter((todo) => todo.status.checked === false),
+  'completed': () => app.allTodos.filter((todo) => todo.status.checked === true)
 }
 
 const onLoad = () => {
@@ -33,8 +31,6 @@ const onLoad = () => {
 }
 
 app.updateLists = function () {
-  app.completedTodos = app.allTodos.filter((todo) => todo.status.checked === true)
-  app.activeTodos = app.allTodos.filter((todo) => todo.status.checked === false)
   app.setView()
   app.populateTable()
   app.setClearCompleted()
@@ -73,7 +69,7 @@ app.setClearCompleted = function () {
 
 app.updateCount = function () {
   const paragraphElement = document.getElementById('todo-count')
-  const itemsLeft = app.allTodos.length - app.completedTodos.length
+  const itemsLeft = app.allTodos.length - app.listTypes['completed'].length
   paragraphElement.innerHTML = (itemsLeft === 1) ? `1 item left` : `${itemsLeft} items left`
 }
 

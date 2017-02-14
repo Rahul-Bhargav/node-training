@@ -1,12 +1,14 @@
 class TodoItem {
   constructor (id, description, status) {
     this.createRowItems(id, description, status)
+    this.setTaskStyle()
   }
 
   onDoubleClick () {
     this.task.readOnly = false
     this._unSavedDescription = this.task.value
     this.task.setAttribute('class', 'edit')
+    this.hideCheckBox(true)
     // set task style to have different font or the input box to have a border
   }
 
@@ -17,12 +19,13 @@ class TodoItem {
         this._unSavedDescription = task
         this.task.value = task
         this.task.readOnly = true
-        if (this.status.checked) this.task.setAttribute('class', 'read-only-completed')
-        else this.task.setAttribute('class', 'read-only')
+        this.setTaskStyle()
+        this.hideCheckBox(false)
       })
       .catch(() => {
         alert('Error:could not update')
         this.task.value = this._unSavedDescription
+        this.hideCheckBox(false)
       })
   }
 
@@ -30,8 +33,7 @@ class TodoItem {
     app.api.updateTask(this.element.id, this.task.value, this.status.checked)
       .then(() => {
         this._unSavedStatus = this.status.checked
-        if (this.status.checked) this.task.setAttribute('class', 'read-only-completed')
-        else this.task.setAttribute('class', 'read-only')
+        this.setTaskStyle()
         app.TodoListOperations.setToggle()
         app.updateLists()
       })
@@ -43,6 +45,16 @@ class TodoItem {
 
   onDelete () {
     return app.api.deleteTask(this.element.id)
+  }
+
+  setTaskStyle () {
+    if (this.status.checked) this.task.setAttribute('class', 'read-only-completed')
+    else this.task.setAttribute('class', 'read-only')
+  }
+
+  hideCheckBox (hide) {
+    this.status.style.display = (hide) ? 'none' : 'inline'
+    this.removeButton.setAttribute('class', `${hide ? '' : 'destroy'}`)
   }
 
   createRowItems (id, description, status) {

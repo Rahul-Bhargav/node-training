@@ -7,12 +7,6 @@ app.api = {
         'Content-Type': 'application/json'
       }
     })
-      .then(function (response) {
-        return response.json()
-      })
-      .catch(function (err) {
-        console.log(err)
-      })
   },
 
   updateAll: function (status) {
@@ -52,26 +46,14 @@ app.api = {
 
   insertTask: function (description) {
     return fetch(`/write/${description}`, { method: 'post' })
-      .then((response) => {
-        return response.json()
-      })
-      .catch(function (err) {
-        console.log(err)
-      })
   },
 
   deleteTask: function (id) {
     return fetch(`/destroy/${id}`, { method: 'delete' })
-      .catch(function (err) {
-        console.log(err)
-      })
   },
 
   deleteCompleted: function () {
     return fetch(`/destroycompleted`, { method: 'delete' })
-      .catch(function (err) {
-        console.log(err)
-      })
   }
 }
 

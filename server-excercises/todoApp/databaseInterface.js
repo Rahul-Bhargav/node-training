@@ -1,6 +1,8 @@
 const Sequelize = require('Sequelize')
 
-const sequelize = new Sequelize('postgres://rahulsurabhi:rah1161!@localhost:5432/Excercise')
+const dbName = process.env.DEV_MODE === 'test' ? 'test' : 'Excercise'
+
+const sequelize = new Sequelize('postgres://rahulsurabhi:rah1161!@localhost:5432/' + dbName)
 
 const databaseOprations = {
   insert: function (descriptionInput) {

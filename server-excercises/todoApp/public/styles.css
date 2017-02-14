@@ -321,7 +321,7 @@ label[for='toggle-all'] {
 	border-color: rgba(175, 47, 47, 0.2);
 }
 
-.clear-completed-show, .clear-completed:active {
+.clear-completed-show, .clear-completed-show:active {
 	float: right;
 	position: relative;
 	line-height: 20px;
@@ -330,7 +330,7 @@ label[for='toggle-all'] {
 	position: relative;
 }
 
-.clear-completed:hover {
+.clear-completed-show:hover {
 	text-decoration: underline;
 }
 

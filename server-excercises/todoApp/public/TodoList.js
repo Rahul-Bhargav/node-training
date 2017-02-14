@@ -5,12 +5,9 @@ app.TodoListOperations.deleteItemFromList = function (todo) {
 }
 
 app.TodoListOperations.deleteCompletedFromList = function () {
-  // const tempList = app.allTodos
-  console.log(app.allTodos)
   app.allTodos = app.allTodos.filter((todo, index) => {
     return !(todo.status.checked)
   })
-  console.log(app.allTodos)
   app.updateLists()
   app.updateHiddenDivisions()
 }
@@ -25,6 +22,7 @@ app.TodoListOperations.insertIntoList = function (id, description, status) {
 app.TodoListOperations.toggleListStatus = function (status) {
   app.allTodos.forEach((todo) => {
     todo.status.checked = status
+    todo.setTaskStyle()
   })
   app.updateLists()
 }
@@ -35,6 +33,9 @@ app.TodoListOperations.setToggle = function () {
 
 app.TodoListOperations.initiateList = () => {
   app.api.readTasks()
+    .then(function (response) {
+      return response.json()
+    })
     .then((response) => {
       response.forEach(({id, description, status}) => {
         app.TodoListOperations.insertIntoList(id, description, status)
@@ -44,20 +45,29 @@ app.TodoListOperations.initiateList = () => {
       app.TodoListOperations.setToggle()
       app.updateHiddenDivisions()
     })
+    .catch(function (err) {
+      console.log(err)
+    })
 }
 
 app.TodoListOperations.insertNewTask = function () {
   let description = document.getElementById('task-text').value
   description = app.escapeHtml(description)
-  app.api.insertTask(description)    // Escape HTML
+  // Escape HTML
+  app.api.insertTask(description)
+    .then((response) => {
+      return response.json()
+    })
     .then((response) => {
       document.getElementById('task-text').value = ''
       const todo = app.TodoListOperations.insertIntoList(response[0].id, description, false)
       app.TodoListOperations.addTodoItemEvents(todo)
-      // app.appendChild(todo.element)
       app.TodoListOperations.setToggle()
       app.updateLists()
       app.updateHiddenDivisions()
+    })
+    .catch(function (err) {
+      console.log(err)
     })
 }
 
@@ -76,9 +86,6 @@ app.TodoListOperations.addGlobalEvents = function () {
       app.TodoListOperations.insertNewTask()
     }
   })
-  // document.getElementById('insert-task').addEventListener('click', (e) => {
-  //   app.TodoListOperations.insertNewTask()
-  // })
   // Update all
   document.getElementById('toggle-all').addEventListener('change', (e) => {
     const status = e.target.checked
@@ -94,19 +101,10 @@ app.TodoListOperations.addGlobalEvents = function () {
         app.TodoListOperations.deleteCompletedFromList()
         app.TodoListOperations.setToggle()
       })
+      .catch(function (err) {
+        console.log(err)
+      })
   })
-  // // Display all Tasks
-  // document.getElementById('select-all').addEventListener('click', (e) => {
-  //   location.hash = '/all'
-  // })
-  // // Display Active Tasks
-  // document.getElementById('select-active').addEventListener('click', (e) => {
-  //   location.hash = '/active'
-  // })
-  // // Display Completed Tasks
-  // document.getElementById('select-completed').addEventListener('click', (e) => {
-  //   location.hash = '/completed'
-  // })
 }
 
 app.TodoListOperations.addTodoItemEvents = function (item) {
@@ -129,6 +127,13 @@ app.TodoListOperations.addTodoItemEvents = function (item) {
   // Blur
   item.task.addEventListener('blur', () => {
     item.onBlur()
+  })
+
+  item.task.addEventListener('keyup', (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault()
+      item.onBlur()
+    }
   })
   // CheckBox
   item.status.addEventListener('change', () => {
