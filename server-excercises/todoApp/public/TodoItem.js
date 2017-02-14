@@ -14,11 +14,12 @@ class TodoItem {
   }
 
   onBlur () {
-    let task = app.escapeHtml(this.task.value)
-    app.api.updateTask(this.element.id, task, this.status.checked)
+    let description = app.escapeHtml(this.task.value)
+    app.api.updateTask(this.element.id, description, this.status.checked)
       .then(() => {
-        this._unSavedDescription = task
-        this.task.value = task
+        this._unSavedDescription = description
+        this.task.value = description
+        this.task.setAttribute('title', description)
         this.task.readOnly = true
         this.setTaskStyle()
         this.hideCheckBox(false)
@@ -26,6 +27,7 @@ class TodoItem {
       .catch(() => {
         alert('Error:could not update')
         this.task.value = this._unSavedDescription
+        this.setTaskStyle()
         this.hideCheckBox(false)
       })
   }
@@ -76,6 +78,7 @@ class TodoItem {
     this.task.setAttribute('name', 'description')
     this.task.setAttribute('class', 'read-only')
     this.task.setAttribute('value', description)
+    this.task.setAttribute('title', description)
     this.task.setAttribute('readonly', true)
     this._unSavedDescription = description
 
