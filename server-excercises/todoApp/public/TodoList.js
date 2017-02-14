@@ -24,7 +24,10 @@ app.TodoListOperations.toggleListStatus = function (status) {
     todo.status.checked = status
     todo.setTaskStyle()
   })
-  app.updateLists()
+  app.setView()
+  if (app.page !== '') app.populateTable()
+  app.setClearCompleted()
+  app.updateCount()
 }
 
 app.TodoListOperations.setToggle = function () {

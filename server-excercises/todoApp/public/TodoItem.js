@@ -38,7 +38,10 @@ class TodoItem {
         this._unSavedStatus = this.status.checked
         this.setTaskStyle()
         app.TodoListOperations.setToggle()
-        app.updateLists()
+        app.setView()
+        if (app.page !== '') app.populateTable()
+        app.setClearCompleted()
+        app.updateCount()
       })
       .catch(() => {
         alert('Error:could not update')
