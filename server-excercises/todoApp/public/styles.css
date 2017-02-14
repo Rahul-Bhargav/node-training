@@ -187,7 +187,7 @@ label[for='toggle-all'] {
 	padding: 15px 60px 15px 15px;
 	display: block;
 	line-height: 1.2;
-	transition: color 1s ease;
+	transition: color 0.5s ease;
   word-break: break-all;
   position: relative;
 	margin: 0;
@@ -210,7 +210,7 @@ label[for='toggle-all'] {
   padding: 15px 60px 15px 15px;
 	display: block;
 	line-height: 1.2;
-	transition:color 1s ease;
+	transition:color 0.5s ease;
   word-break: break-all;
   position: relative;
 	margin-left: 50px;
