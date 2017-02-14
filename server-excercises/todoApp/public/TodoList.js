@@ -93,6 +93,9 @@ app.TodoListOperations.addGlobalEvents = function () {
       .then(() => {
         app.TodoListOperations.toggleListStatus(status)
       })
+      .catch(() => {
+        console.log('Error connecting to server')
+      })
   })
   // Clear Completed
   document.getElementById('clear-completed').addEventListener('click', (e) => {
