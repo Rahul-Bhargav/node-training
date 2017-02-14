@@ -199,7 +199,7 @@ label[for='toggle-all'] {
 	line-height: 1.4em;
 	border: 0;
 	outline: none;
-	color: inherit;
+	color: black;
 	text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -221,7 +221,7 @@ label[for='toggle-all'] {
 	line-height: 1.4em;
 	border: 0;
 	outline: none;
-	color: inherit;
+	/*color: inherit;*/
 	color: #d9d9d9;
 	text-decoration: line-through;
 	text-overflow: ellipsis;
