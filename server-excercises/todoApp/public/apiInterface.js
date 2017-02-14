@@ -1,12 +1,6 @@
 app.api = {
   readTasks: function () {
-    return fetch('/read', {
-      method: 'get',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
+    return fetch('/read', {method: 'get'})
   },
 
   updateAll: function (status) {
@@ -52,19 +46,17 @@ app.api = {
   },
 
   deleteTask: function (id) {
-    const isValid = this.checkValidity(id, 'description', 'status')
+    const isValid = this.checkValidity(id, 'description', false)
     if (isValid !== true) return isValid
-
     this.checkValidity(id, 'string', false)
     return fetch(`/destroy/${id}`, { method: 'delete' })
   },
 
   deleteCompleted: function () {
-    this.checkValidity(1, 'string', status)
     return fetch(`/destroycompleted`, { method: 'delete' })
   },
   checkValidity: function (id, description, status) {
-    if (typeof id !== 'number') return `id-${id} is not a number`
+    if (isNaN(parseInt(id))) return `id-${id} is not a number`
 
     if (typeof description !== 'string') return `description-${description} is not a string`
 
