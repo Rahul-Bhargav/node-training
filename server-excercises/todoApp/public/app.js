@@ -15,7 +15,7 @@ app.entityMap = {
 }
 
 app.escapeHtml = function (string) {
-  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+  return String(string).replace(/[&<>"'`=/]/g, function (s) {
     return app.entityMap[s]
   })
 }

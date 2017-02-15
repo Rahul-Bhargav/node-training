@@ -41,14 +41,12 @@ app.api = {
     const isValid = this.checkValidity(1, description, true)
     if (isValid !== true) return isValid
 
-    this.checkValidity(1, description, false)
     return fetch(`/write/${description}`, { method: 'post' })
   },
 
   deleteTask: function (id) {
     const isValid = this.checkValidity(id, 'description', false)
     if (isValid !== true) return isValid
-    this.checkValidity(id, 'string', false)
     return fetch(`/destroy/${id}`, { method: 'delete' })
   },
 

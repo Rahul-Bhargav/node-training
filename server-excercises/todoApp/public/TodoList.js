@@ -1,5 +1,6 @@
 app.TodoListOperations.deleteItemFromList = function (todo) {
   app.allTodos = app.allTodos.filter((item) => item.element.id !== todo.element.id)
+  app.TodoListOperations.setToggle()
   app.updateLists()
   app.updateHiddenDivisions()
 }
@@ -106,7 +107,6 @@ app.TodoListOperations.addGlobalEvents = function () {
     app.api.deleteCompleted(status)
       .then(() => {
         app.TodoListOperations.deleteCompletedFromList()
-        app.TodoListOperations.setToggle()
       })
       .catch(function (err) {
         console.log(err)

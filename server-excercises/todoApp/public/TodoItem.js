@@ -23,6 +23,7 @@ class TodoItem {
 
   onBlur () {
     let description = app.escapeHtml(this.task.value)
+    if (description === '') app.TodoListOperations.deleteItemFromList(this)
     if (description === this._unSavedDescription) {
       this.cancelEdit()
     }
