@@ -15,6 +15,12 @@ class TodoItem {
 
   onBlur () {
     let description = app.escapeHtml(this.task.value)
+    if (description === this._unSavedDescription) {
+      this.task.readOnly = true
+      this.setTaskStyle()
+      this.hideCheckBox(false)
+      return
+    }
     app.api.updateTask(this.element.id, description, this.status.checked)
       .then(() => {
         this._unSavedDescription = description
