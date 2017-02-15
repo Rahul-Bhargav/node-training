@@ -13,13 +13,18 @@ class TodoItem {
     // set task style to have different font or the input box to have a border
   }
 
+  cancelEdit () {
+    this.task.value = this._unSavedDescription
+    this.task.readOnly = true
+    this.setTaskStyle()
+    this.hideCheckBox(false)
+    return
+  }
+
   onBlur () {
     let description = app.escapeHtml(this.task.value)
     if (description === this._unSavedDescription) {
-      this.task.readOnly = true
-      this.setTaskStyle()
-      this.hideCheckBox(false)
-      return
+      this.cancelEdit()
     }
     app.api.updateTask(this.element.id, description, this.status.checked)
       .then(() => {

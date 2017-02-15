@@ -81,6 +81,7 @@ app.TodoListOperations.addEvents = function () {
   })
 }
 
+// Can be moved to another module that adds individual addEvents
 app.TodoListOperations.addGlobalEvents = function () {
   // Insert Task
   document.getElementById('task-text').addEventListener('keyup', (e) => {
@@ -139,6 +140,10 @@ app.TodoListOperations.addTodoItemEvents = function (item) {
     if (e.keyCode === 13) {
       e.preventDefault()
       item.onBlur()
+    }
+    if (e.keyCode === 27) {
+      e.preventDefault()
+      item.cancelEdit()
     }
   })
   // CheckBox
