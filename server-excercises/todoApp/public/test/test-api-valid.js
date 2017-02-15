@@ -1,6 +1,6 @@
-var expect = chai.expect
+const expect = chai.expect
 
-var dbState = [
+const dbState = [
   { id: 297, status: false, description: 'eat' },
   { id: 298, status: true, description: 'sleep' },
   { id: 299, status: true, description: 'work' },

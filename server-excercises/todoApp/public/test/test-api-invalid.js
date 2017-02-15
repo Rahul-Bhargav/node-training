@@ -1,4 +1,4 @@
-var expect = chai.expect
+const expect = chai.expect
 
 
 describe('update task when given invalid input', function () {
