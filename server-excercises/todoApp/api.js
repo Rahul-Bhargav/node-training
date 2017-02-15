@@ -1,97 +1,49 @@
-const postgreDB = require('./databaseInterface')
+const postgreDB = require('./postgresInterface')
 
 const api = {}
 
-api.readTasks = function (request, response) {
+api.readTasks = function () {
   return postgreDB.read()
-    .then((result) => {
-      response.json(result)
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
 }
 
-api.writeTask = function (request, response) {
-  const task = request.params.task
-  task.trim()
-  if (!task || task === '') {
-    response.sendStatus(500)
-    return
-  }
-  postgreDB.insert(task)
-    .then((result) => {
-      response.send(result)
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
+api.writeTask = function (task) {
+  if (typeof task !== 'string') return `description-${task} is not a string`
+  return postgreDB.insert(task)
 }
 
-api.destroyTask = function (request, response) {
-  const id = request.params.id
-  if (!id) {
-    response.sendStatus(500)
-    return
-  }
-  postgreDB.destroy(id)
-    .then(() => {
-      response.send('Deleted')
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
+api.destroyTask = function (id) {
+  if (isNaN(parseInt(id))) return `id-${id} is not a valid number`
+  return postgreDB.destroy(id)
 }
 
-api.destroyCompleted = function (request, response) {
-  postgreDB.destroyCompleted()
-    .then(() => {
-      response.send('Delete completed')
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
+api.destroyCompleted = function () {
+  return postgreDB.destroyCompleted()
 }
 
-api.updateAll = function (request, response) {
-  if (!request.body) response.sendStatus(500)
-  const status = request.body.status
-
-  if ((status === null || status === undefined)) {
-    response.sendStatus(500)
-    return
-  }
-  postgreDB.updateAll(status)
-    .then(() => {
-      response.send('Updated all')
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
+api.updateAll = function (status) {
+  if (typeof status !== 'boolean') return `status given is not a boolean`
+  return postgreDB.updateAll(status)
 }
 
-api.updateTask = function (request, response) {
-  if (!request.body) response.sendStatus(500)
-  const task = request.body.task
-  const status = request.body.status
-  const id = request.params.id
-  if (!id || !task && (status === null)) {
-    response.sendStatus(500)
-    return
-  }
-  postgreDB.update(task, id, status)
-    .then(() => {
-      response.send('Updated')
-    })
-    .catch((error) => {
-      response.sendStatus(500)
-      console.error(error)
-    })
+api.updateTask = function (id, task, status) {
+  const isValid = checkValidity(id, task, status)
+  if (isValid !== true) return isValid
+  return postgreDB.update(task, id, status)
+}
+
+const checkValidity = function (id, description, status) {
+  if (isFloat(id)) return `id-${id} is not a valid number`
+  if (isNaN(parseInt(id))) return `id-${id} is not a valid number`
+
+  if (typeof description !== 'string') return `description-${description} is not a string`
+
+  if (typeof status !== 'boolean') return `status given is not a boolean`
+
+  return true
+}
+
+function isFloat (n) {
+  return Number(n) === n && n % 1 !== 0
 }
 
 module.exports = api
