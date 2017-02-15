@@ -5,7 +5,7 @@
 <body onload="onLoad()">
   <section class="todoapp">
     <header class="header">
-       <h1>todos</h1>
+      <h1>todos</h1>
       <input class="toggle-all" type="checkbox" id="toggle-all">
       <label for="toggle-all">Mark all as complete</label>
       <input class="new-todo" placeholder="What needs to be done?" autofocus="" id="task-text">
@@ -25,10 +25,31 @@
     </footer>
   </section>
   <footer class="info">
-      <p>Double-click to edit a todo</p>
-      <p>Created by TodoMVC</p>
-      <p>Copied by Rahul</p>
+    <p>Double-click to edit a todo</p>
+    <p>Created by TodoMVC</p>
+    <p>Copied by Rahul</p>
   </footer>
+
+  <!--<div class="confirm-overlay">
+    <div class="translucent"></div>
+    <div class="confirm-box">
+      <div class="title">
+        <span class="title-text">ALERT</span>
+      </div>
+      <div class="confirm-text">
+        <span class="text">Are you sure you want to check/uncheck select all?</span>
+      </div>
+      <div class="confirm-buttons">
+        <div class="button">
+          <button id="confirm-yes">YES</button>
+        </div>
+        <div class="button">
+          <button id="confirm-no">NO</button>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
   <script src="app.js"></script>
   <script src="TodoItem.js"></script>
   <script src="TodoList.js"></script>
